@@ -1,0 +1,7 @@
+{
+  "name": "restFullApi",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

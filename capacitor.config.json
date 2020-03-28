@@ -1,0 +1,9 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "COVID-19 INFORMATION",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {},
+  "linuxAndroidStudioPath" : "/opt/android-studio/bin/studio.sh"
+}
