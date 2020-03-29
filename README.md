@@ -23,16 +23,17 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `Deploying to android`
-Before you deploy it, change the code in capacitor.config.json file, at the last line "linuxAndroidStudioPath" : "/opt/android-studio/bin/studio.sh" into your android studio path. If youre using windows change into 
-"windowsAndroidStudioPath" : "Your_Path"
+Before you deploy it, change the code in capacitor.config.json file, at the last line "linuxAndroidStudioPath" : "/opt/android-studio/bin/studio.sh" into your android studio path. If youre using windows change into "windowsAndroidStudioPath" : "Your_Path". <br/>
 If you want to deploy this project into apk installer (android), do this :
 
 ### `npx cap add android`
-To build android dependencies
+To build android dependencies. Just do this once, if in the repository has a 'android' folder, you dont have to do this script again.
 
 ### `npx cap copy android`
 If code has changed, use this script to make your changing come to android
 
+### `npx cap open android`
+Open android studio
 
 ### `npm run eject`
 
@@ -43,6 +44,13 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+# Screenshot App
+<p align="center">
+    <img src="src/components/SS/SS1.jpg" title="Splash Screen">
+    <img src="src/components/SS/SS2.jpg" title="Side Menu">
+    <img src="src/components/SS/SS3.jpg" title="Covid Information Indonesia">
+</p>
 
 ## Learn More
 
