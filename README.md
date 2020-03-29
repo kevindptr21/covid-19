@@ -47,9 +47,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 # Screenshot App
 <p align="center">
-    <img src="src/components/SS/SS1.jpg" title="Splash Screen">
-    <img src="src/components/SS/SS2.jpg" title="Side Menu">
-    <img src="src/components/SS/SS3.jpg" title="Covid Information Indonesia">
+    <img src="src/components/SS/SS1.jpg" title="Splash Screen" width="150">
+    <img src="src/components/SS/SS2.jpg" title="Side Menu" width="150">
+    <img src="src/components/SS/SS3.jpg" title="Covid Information Indonesia" width="150">
 </p>
 
 ## Learn More
