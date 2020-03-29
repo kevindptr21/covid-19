@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import WaitingContent from './../components/WaitingContent';
-import { IonCard, IonLoading, IonCardHeader, IonCardContent, IonCardTitle, IonGrid, IonRow, IonCol, IonCardSubtitle, IonItemDivider, IonRefresher} from '@ionic/react';
+import { IonCard, IonLoading, IonCardHeader, IonCardContent, IonCardTitle, IonGrid, IonRow, IonCol, IonCardSubtitle, IonItemDivider, IonRefresher } from '@ionic/react';
 import { RefresherEventDetail } from '@ionic/core';
 
 const ID: React.FC = () => {
-    let url = "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=indonesia";
     const rapidApiHost = "coronavirus-monitor.p.rapidapi.com";
     const rapidApiKey = "2ddb35739emshcd2a46143e34353p14d8e1jsn709560cb6c5f";
     const [loading, setLoading] = useState(true);
@@ -23,24 +22,54 @@ const ID: React.FC = () => {
     }
 
     useEffect(() => {
-        fetch(url, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": rapidApiHost,
-                "x-rapidapi-key": rapidApiKey
-            }
-        }).then(async response => {
-            await response.json().then(({ latest_stat_by_country }) => setID(latest_stat_by_country));
-            setLoading(false)
-        }).catch(rejected => {
-            console.log(rejected)
-        })
+        const urls = [
+            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=indonesia",
+            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=indonesia"
+        ];
+        const jsonData: any = [];
+        urls.map(async (url: string, index) => {
+            await fetch(url, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": rapidApiHost,
+                    "x-rapidapi-key": rapidApiKey
+                }
+            }).then(response => {
+                return response.json();
+            }).then(index === 0 ?
+                ({ latest_stat_by_country }) => setID(latest_stat_by_country) :
+                ({ stat_by_country }) => jsonData.push(stat_by_country)
+            ).then(() => {
+                // ## Activate Code Below To Get Data as CSV ##
 
+                // let csvContent = "data:text/csv;charset=utf-8,"+"Tanggal,Perawatan,Sembuh,Meninggal,Total_Kasus\n"
+                //     + jsonData[0].map((e: any) => { 
+                //         const d = new Date(e.record_date);
+                //         return (
+                //             ((d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear())+","
+                //             +(e.active_cases.replace(/,/g,""))+","
+                //             +(e.total_recovered.replace(/,/g,""))+","
+                //             +(e.total_deaths.replace(/,/g,""))+","
+                //             +(e.total_cases.replace(/,/g,"")))
+                //         ) 
+                //     }).join("\n");
+                // var encodedUri = encodeURI(csvContent);
+                // var link = document.createElement("a");
+                // link.setAttribute("href", encodedUri);
+                // link.setAttribute("download", "DataCoronaIndonesia.csv");
+                // document.body.appendChild(link);
+                // link.click();
+
+                setLoading(false);
+            }).catch(rejected => {
+                console.log(rejected)
+            })
+        })
 
         const getStatIndonesia = async () => {
             await fetch('https://api.kawalcorona.com/indonesia/provinsi/')
-                .then(response2 => {
-                    return response2.json();
+                .then(response => {
+                    return response.json();
                 }).then((data) => {
                     setProvince(data)
                 }).catch(rejected => {
@@ -51,11 +80,11 @@ const ID: React.FC = () => {
 
         getStatIndonesia();
 
-    }, [url, state])
+    }, [state])
 
     return (
         <div>
-            <IonRefresher slot="fixed" onIonRefresh={doRefresh}/>
+            <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
             <IonLoading isOpen={loading} message="Getting Data" />
             {loading ? <WaitingContent /> :
                 <div>
@@ -64,6 +93,7 @@ const ID: React.FC = () => {
                             <IonCardTitle >Update Kasus Corona di Indonesia</IonCardTitle>
                         </IonCardHeader>
                     </IonCard>
+
                     {ID.map((isi: any, index) => {
                         return (
                             <div key={index}>
@@ -122,10 +152,7 @@ const ID: React.FC = () => {
                         )
                     })
                     }
-                </div>
-            }
-            {
-                !loading ?
+
                     <IonCard>
                         <IonCardHeader>
                             <IonCardTitle className="ion-text-center">Data Kasus Corona Tiap Provinsi</IonCardTitle>
@@ -155,10 +182,11 @@ const ID: React.FC = () => {
                                 </div>
 
                             </IonGrid>
-
                         </IonCardContent>
-                    </IonCard> : " "
+                    </IonCard>
+                </div>
             }
+
         </div>
     )
 }
