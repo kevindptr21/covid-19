@@ -7,7 +7,7 @@ const ID: React.FC = () => {
     const rapidApiHost = "coronavirus-monitor.p.rapidapi.com";
     const rapidApiKey = "2ddb35739emshcd2a46143e34353p14d8e1jsn709560cb6c5f";
     const [loading, setLoading] = useState(true);
-    const [ID, setID] = useState([]);
+    const [ID, setID] = useState<any[]>([]);
     const [province, setProvince] = useState([]);
     const [state, setState] = useState(0);
 
@@ -23,7 +23,7 @@ const ID: React.FC = () => {
 
     useEffect(() => {
         const urls = [
-            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=indonesia",
+            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country_name.php?country=indonesia",
             "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=indonesia"
         ];
         const jsonData: any = [];
