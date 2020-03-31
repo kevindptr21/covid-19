@@ -23,7 +23,7 @@ const World: React.FC = () => {
 
     useEffect(() => {
         const urls = [
-            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/worldstat.php",
+            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/world_total_stat.php",
             "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_country.php"
         ];
         urls.map(async (url: string, index) => {
