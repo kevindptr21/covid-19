@@ -3,9 +3,9 @@ import ID from './pages/ID';
 import NCOVID from './pages/NCOVID';
 import World from './pages/World';
 import React from 'react';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route} from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,26 +33,13 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <IonPage>
-              <IonHeader>
-                <IonToolbar color="danger">
-                  <IonButtons slot="start">
-                    <IonMenuButton />
-                  </IonButtons>
-                  <IonTitle>COVID-19 INFORMATION</IonTitle>
-                </IonToolbar>
-              </IonHeader>
-              <IonContent color="dark">
-                <Route path="/page/NCOVID" component={NCOVID} exact={true} />
-                <Route path="/page/ID" component={ID} exact={true} />
-                <Route path="/page/World" component={World} exact={true} />
-                <Route path="/" render={() => <Redirect to="/page/NCOVID" />} exact={true} />
-              </IonContent>
-            </IonPage>
+            <Route path="/page/NCOVID" component={NCOVID} exact={true} />
+            <Route path="/page/ID" component={ID} exact={true} />
+            <Route path="/page/World" component={World} exact={true} />
+            <Route path="/" render={() => <Redirect to="/page/NCOVID" />} exact={true} />
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
-
     </IonApp>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import WaitingContent from './../components/WaitingContent';
-import { IonCard, IonLoading, IonCardHeader, IonCardContent, IonCardTitle, IonGrid, IonRow, IonCol, IonCardSubtitle, IonItemDivider, IonRefresher } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonGrid, IonRow, IonCol, IonCardSubtitle, IonItemDivider, IonRefresher, IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonSpinner, IonSkeletonText } from '@ionic/react';
 import { RefresherEventDetail } from '@ionic/core';
 
 const ID: React.FC = () => {
@@ -23,7 +22,7 @@ const ID: React.FC = () => {
 
     useEffect(() => {
         const urls = [
-            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country_name.php?country=indonesia",
+            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=indonesia",
             "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=indonesia"
         ];
         const jsonData: any = [];
@@ -82,90 +81,116 @@ const ID: React.FC = () => {
 
     }, [state])
 
+    const data = {
+        tanggal: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.record_date),
+        total_kasus: loading ? <IonSpinner /> : ID.map(isi => isi.total_cases),
+        meninggal: loading ? <IonSpinner /> : ID.map(isi => isi.total_deaths),
+        sembuh: loading ? <IonSpinner /> : ID.map(isi => isi.total_recovered),
+        perawatan: loading ? <IonSpinner /> : ID.map(isi => isi.active_cases),
+        kasus_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.new_cases),
+        kematian_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.new_deaths)
+    }
+
     return (
-        <div>
-            <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
-            <IonLoading isOpen={loading} message="Getting Data" />
-            {loading ? <WaitingContent /> :
-                <div>
-                    <IonCard>
-                        <IonCardHeader className="ion-text-center">
-                            <IonCardTitle >Update Kasus Corona di Indonesia</IonCardTitle>
-                        </IonCardHeader>
-                    </IonCard>
-
-                    {ID.map((isi: any, index) => {
-                        return (
-                            <div key={index}>
-                                <IonGrid>
-                                    <IonRow className="ion-text-center">
-                                        <IonCol>
-                                            <IonCard color="danger">
-                                                <IonCardHeader>
-                                                    <IonCardTitle>Meninggal</IonCardTitle>
-                                                </IonCardHeader>
-                                                <IonCardContent>
-                                                    <IonCardTitle style={{ fontSize: "30px" }}>{isi.total_deaths}</IonCardTitle>
-                                                </IonCardContent>
-                                            </IonCard>
-                                        </IonCol>
-                                        <IonCol>
-                                            <IonCard color="success">
-                                                <IonCardHeader>
-                                                    <IonCardTitle>Sembuh</IonCardTitle>
-                                                </IonCardHeader>
-                                                <IonCardContent>
-                                                    <IonCardTitle style={{ fontSize: "30px" }}>{isi.total_recovered}</IonCardTitle>
-                                                </IonCardContent>
-                                            </IonCard>
-                                        </IonCol>
-                                    </IonRow>
-                                    <IonRow className="ion-text-center">
-                                        <IonCol>
-                                            <IonCard color="warning">
-                                                <IonCardHeader>
-                                                    <IonCardTitle>Dalam Perawatan</IonCardTitle>
-                                                </IonCardHeader>
-                                                <IonCardContent>
-                                                    <IonCardTitle style={{ fontSize: "30px" }}>{isi.active_cases}</IonCardTitle>
-                                                </IonCardContent>
-                                            </IonCard>
-                                        </IonCol>
-                                    </IonRow>
-                                </IonGrid>
-                                <IonCard>
-                                    <IonCardHeader>
-                                        <IonCardTitle>Total Kasus Terkonfirmasi</IonCardTitle>
-                                        <IonCardSubtitle>Tanggal : {isi.record_date}</IonCardSubtitle>
-                                    </IonCardHeader>
-                                    <IonCardContent>
-                                        <IonCardTitle style={{ fontSize: "30px" }}>{isi.total_cases}</IonCardTitle>
-
-                                        <IonItemDivider />
-                                        <pre>
-                                            Temuan Kasus Baru           : {isi.new_cases}<br />
-                                            Kematian Baru               : {isi.new_deaths}<br />
-                                        </pre>
-                                    </IonCardContent>
-                                </IonCard>
-                            </div>
-                        )
-                    })
-                    }
-
-                    <IonCard>
-                        <IonCardHeader>
-                            <IonCardTitle className="ion-text-center">Data Kasus Corona Tiap Provinsi</IonCardTitle>
-                        </IonCardHeader>
-                        <IonCardContent>
-                            <IonGrid>
-                                <IonRow>
-                                    <IonCol size="1">No.</IonCol>
-                                    <IonCol size="4">Provinsi</IonCol>
-                                    <IonCol>Total Kasus</IonCol>
-                                    <IonCol >Sembuh</IonCol>
-                                    <IonCol>Meninggal</IonCol>
-                                </IonRow>
+        <IonPage>
+            <IonHeader>
+                <IonToolbar color="danger">
+                    <IonButtons slot="start">
+                        <IonMenuButton />
+                    </IonButtons>
+                    <IonTitle>COVID-19 INDONESIA</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent color="dark">
+                <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
+                <IonCard>
+                    <IonCardHeader className="ion-text-center">
+                        <IonCardTitle >Update Kasus Corona di Indonesia</IonCardTitle>
+                    </IonCardHeader>
+                </IonCard>
+                <IonGrid>
+                    <IonRow className="ion-text-center">
+                        <IonCol>
+                            <IonCard color="danger">
+                                <IonCardHeader>
+                                    <IonCardTitle>Meninggal</IonCardTitle>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <IonCardTitle style={{ fontSize: "30px" }}>{data.meninggal}</IonCardTitle>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                        <IonCol>
+                            <IonCard color="success">
+                                <IonCardHeader>
+                                    <IonCardTitle>Sembuh</IonCardTitle>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <IonCardTitle style={{ fontSize: "30px" }}>{data.sembuh}</IonCardTitle>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow className="ion-text-center">
+                        <IonCol>
+                            <IonCard color="warning">
+                                <IonCardHeader>
+                                    <IonCardTitle>Dalam Perawatan</IonCardTitle>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <IonCardTitle style={{ fontSize: "30px" }}>{data.perawatan}</IonCardTitle>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+                <IonCard>
+                    <IonCardHeader>
+                        <IonCardTitle>
+                            <IonRow>
+                                <IonCol>Total Kasus Terkonfirmasi</IonCol>
+                            </IonRow>
+                        </IonCardTitle>
+                        <IonCardSubtitle>
+                            <IonRow>
+                                <IonCol size="3">Tanggal :</IonCol>
+                                <IonCol>{data.tanggal}</IonCol>
+                            </IonRow>
+                        </IonCardSubtitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                        <IonCardTitle style={{ fontSize: "30px",color:'red' }}>
+                            <IonRow>
+                                <IonCol>{data.total_kasus}</IonCol>
+                            </IonRow>
+                        </IonCardTitle>
+                        <IonItemDivider />
+                        <IonRow>
+                            <IonCol>Temuan Kasus Baru</IonCol>
+                            <IonCol size="1">:</IonCol>
+                            <IonCol>{data.kasus_baru}</IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol>Kematian Baru</IonCol>
+                            <IonCol size="1">:</IonCol>
+                            <IonCol>{data.kematian_baru}</IonCol>
+                        </IonRow>
+                    </IonCardContent>
+                </IonCard>
+                <IonCard>
+                    <IonCardHeader>
+                        <IonCardTitle className="ion-text-center">Data Kasus Corona Tiap Provinsi</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                        <IonGrid>
+                            <IonRow>
+                                <IonCol size="1">No.</IonCol>
+                                <IonCol size="4">Provinsi</IonCol>
+                                <IonCol>Total Kasus</IonCol>
+                                <IonCol >Sembuh</IonCol>
+                                <IonCol>Meninggal</IonCol>
+                            </IonRow>
+                            {loading ? <IonSpinner /> :
                                 <div style={{ height: "200px", overflow: "scroll" }}>
                                     {province.map((iis: any, index) => {
                                         var no = index + 1;
@@ -180,14 +205,12 @@ const ID: React.FC = () => {
                                         )
                                     })}
                                 </div>
-
-                            </IonGrid>
-                        </IonCardContent>
-                    </IonCard>
-                </div>
-            }
-
-        </div>
+                            }
+                        </IonGrid>
+                    </IonCardContent>
+                </IonCard>
+            </IonContent>
+        </IonPage >
     )
 }
 
