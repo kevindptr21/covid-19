@@ -3,7 +3,7 @@ import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonGrid, IonRow, 
 import { RefresherEventDetail } from '@ionic/core';
 
 const ID: React.FC = () => {
-    const rapidApiHost = "coronavirus-monitor.p.rapidapi.com";
+    const rapidApiHost = "covid-193.p.rapidapi.com";
     const rapidApiKey = "2ddb35739emshcd2a46143e34353p14d8e1jsn709560cb6c5f";
     const [loading, setLoading] = useState(true);
     const [ID, setID] = useState<any[]>([]);
@@ -22,8 +22,8 @@ const ID: React.FC = () => {
 
     useEffect(() => {
         const urls = [
-            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=indonesia",
-            "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=indonesia"
+            "https://covid-193.p.rapidapi.com/statistics?country=Indonesia",
+            "https://covid-193.p.rapidapi.com/history?country=Indonesia"
         ];
         const jsonData: any = [];
         urls.map(async (url: string, index) => {
@@ -36,9 +36,11 @@ const ID: React.FC = () => {
             }).then(response => {
                 return response.json();
             }).then(index === 0 ?
-                ({ latest_stat_by_country }) => setID(latest_stat_by_country) :
-                ({ stat_by_country }) => jsonData.push(stat_by_country)
+                getStats => setID(getStats.response) :
+                getHistory => jsonData.push(getHistory.response)
             ).then(() => {
+                console.log(jsonData)
+
                 // ## Activate Code Below To Get Data as CSV ##
 
                 // let csvContent = "data:text/csv;charset=utf-8,"+"Tanggal,Perawatan,Sembuh,Meninggal,Total_Kasus\n"
@@ -82,13 +84,13 @@ const ID: React.FC = () => {
     }, [state])
 
     const data = {
-        tanggal: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.record_date),
-        total_kasus: loading ? <IonSpinner /> : ID.map(isi => isi.total_cases),
-        meninggal: loading ? <IonSpinner /> : ID.map(isi => isi.total_deaths),
-        sembuh: loading ? <IonSpinner /> : ID.map(isi => isi.total_recovered),
-        perawatan: loading ? <IonSpinner /> : ID.map(isi => isi.active_cases),
-        kasus_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.new_cases),
-        kematian_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.new_deaths)
+        tanggal: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.time.replace(/T/i," ")),
+        total_kasus: loading ? <IonSpinner /> : ID.map(isi => isi.cases.total),
+        meninggal: loading ? <IonSpinner /> : ID.map(isi => isi.deaths.total),
+        sembuh: loading ? <IonSpinner /> : ID.map(isi => isi.cases.recovered),
+        perawatan: loading ? <IonSpinner /> : ID.map(isi => isi.cases.active),
+        kasus_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.cases.new),
+        kematian_baru: loading ? <IonSkeletonText animated /> : ID.map(isi => isi.deaths.new)
     }
 
     return (
